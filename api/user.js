@@ -19,23 +19,20 @@ router.post("/", middleware.hasRequiredFields, async (req, res, next) => {
     // const read_filter = { where: {[Op.or]: [{email_address: req.body.email_address}, 
     //     {phonenumber: req.body.phonenumber}] } };
     const email_read_filter = { where: { email_address: req.body.email_address} };
-    await User.findOne(email_read_filter).then(function(user){
-        if (user)
-            return res.status(400).json({
-                success: false,
-                message: "User with this email already exist."
-            })
-    });
+    const u = await User.findOne(email_read_filter);
+    if (await User.findOne(email_read_filter))
+        return res.status(400).json({
+            success: false,
+            message: "User with this email already exist."
+        })
         
     const phone_read_filter = { where: { phonenumber: req.body.phonenumber} };
-    await User.findOne(phone_read_filter).then(function(user){
-        if (user)
-            return res.status(400).json({
-                success: false,
-                message: "User with this phone number already exist."
-            })
-    });
-
+    if (await User.findOne(phone_read_filter))
+        return res.status(400).json({
+            success: false,
+            message: "User with this phone number already exist."
+        })
+        
     const user = await User.create({
         name: req.body.name,
         email_address: req.body.email_address,
