@@ -1,8 +1,16 @@
 const { Model } = require("sequelize");
+const bcrypt = require("bcrypt");
 const { get_time } = require("../services/utils/common_utils");
 
 module.exports = (sequelize, DataTypes) => {
-    class User extends Model { }
+    class User extends Model { 
+        generateHash(password) {
+            return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+        }
+        comparePassword(password) {
+            return bcrypt.compareSync(password, this.password);
+        }
+    }
     User.init(
         {
             id: {
@@ -51,5 +59,17 @@ module.exports = (sequelize, DataTypes) => {
 
         }
     )
+    // User.beforeUpdate((user, options) => {
+    //     if (options.fields.indexOf("password") > -1 && user.password) {
+    //       const hashedPassword = user.generateHash(user.password);
+    //       user.password = hashedPassword;
+    //     }
+    //   });
+    
+    User.beforeCreate((user, options) => {
+        const hashedPassword = user.generateHash(user.password);
+        user.password = hashedPassword;
+    });
+
     return User;
 }
