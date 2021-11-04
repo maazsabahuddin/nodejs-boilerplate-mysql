@@ -1,42 +1,33 @@
 const { Model } = require("sequelize");
-const bcrypt = require("bcrypt");
 const { get_time } = require("../services/utils/common_utils");
 
 module.exports = (sequelize, DataTypes) => {
-    class User extends Model { 
-        generateHash(password) {
-            return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-        }
-        comparePassword(password) {
-            return bcrypt.compareSync(password, this.password);
-        }
-    }
-    User.init(
+    class Token extends Model { }
+    Token.init(
         {
-            id: {
-                type: DataTypes.INTEGER,
-                autoIncrement: true,
-                primaryKey: true
-            },
-            user_id: {
+            uid: {
                 type: DataTypes.UUID,
                 defaultValue: DataTypes.UUIDV4,
                 allowNull: false,
                 primaryKey: true
             },
-            name: {
+            token: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-            phonenumber: {
+            expiry_time: {
                 type: DataTypes.STRING,
                 allowNull: false
             },
-            email_address: {
+            is_expired: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false
+            },
+            channel: {
                 type: DataTypes.STRING,
                 allowNull: false
             },
-            password: {
+            purpose: {
                 type: DataTypes.STRING,
                 allowNull: false
             },
@@ -54,22 +45,11 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             paranoid: true,
-            modelName: "User",
-            tableName: "user",
+            modelName: "Token",
+            tableName: "token",
             timestamps: false
         }
     )
-    // User.beforeUpdate((user, options) => {
-    //     if (options.fields.indexOf("password") > -1 && user.password) {
-    //       const hashedPassword = user.generateHash(user.password);
-    //       user.password = hashedPassword;
-    //     }
-    //   });
-    
-    User.beforeCreate((user, options) => {
-        const hashedPassword = user.generateHash(user.password);
-        user.password = hashedPassword;
-    });
 
-    return User;
+    return Token;
 }

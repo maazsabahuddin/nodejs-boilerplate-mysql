@@ -8,6 +8,7 @@ const path = require("path");
 const app = express();
 const config = require("./config");
 const morganBody = require("morgan-body");
+const db = require("./models");
 
 const apiRouter = require("./api");
 
@@ -48,6 +49,12 @@ app.use(function (req, res, next) {
 });
 
 
-app.listen(config.port, function () {
-    console.log('app listening at port %s', config.port);
+db.sequelize.sync().then(function () {
+  app.listen(config.port, function () {
+   console.log(`🌎 ==> Server now on port ${config.port}!`);
+  });
 });
+
+// app.listen(config.port, function () {
+//     console.log('app listening at port %s', config.port);
+// });
