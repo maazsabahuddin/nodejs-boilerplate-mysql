@@ -47,7 +47,6 @@ app.use(function (req, res, next) {
   next(createError(404));
 });
 
-// app.disable('etag');
 
 app.listen(config.port, function () {
     console.log('app listening at port %s', config.port);
