@@ -32,22 +32,3 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 module.exports = db;
-
-
-// const config = require("../config");
-// const Sequelize = require("sequelize");
-// const sequelize = new Sequelize(config.database, config.username, config.password, {
-//     host: 'localhost',
-//     dialect: 'mysql',
-//     logging: function () {},
-//     pool: {
-//         max: 5,
-//         min: 0,
-//         idle: 10000
-//     }
-// });
-// // const sequelize = new Sequelize('database', config.username, config.password, {
-// //     dialect: 'mysql'
-// //   })
-
-// module.exports = sequelize;
