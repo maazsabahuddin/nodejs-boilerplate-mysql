@@ -24,7 +24,7 @@ exports.hasRequiredFields = (req, res, next) => {
         return res.status(400).send({errors: 'Missing body'});
 }
 
-exports.hasLoginRequiredFields = (req, res, next, _list) => {
+exports.hasLoginRequiredFields = (req, res, next) => {
     let errors = [];
     if (req.body) {
         if (!req.body.email_address) 
